@@ -70,6 +70,9 @@ Above values may differ depending on actual microphone characteristics.
    
    ![](resources/vlsrun.png)
 
+   > **!NOTE!**: Depending on model size, you need to wait until model loaded in to memory, before start feeding server with voice data. e.g. If model size is ~2GB, it acn take ~10-30 seconds.
+   ![](resources/ram.png)
+
 7. Open unreal
 8. Create actor blueprint
 9. Add Vosk component in components panel
