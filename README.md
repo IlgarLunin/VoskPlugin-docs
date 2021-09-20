@@ -78,24 +78,17 @@ Above values may differ depending on actual microphone characteristics.
 
 10. On begin play
     1. Bind to "Partial Result Received" event
-
     ![](resources/partialresult.png)
 
     2. **[Optional]** Bind to "Final Result Received" event
+    ![](resources/finalresult.png)
 
+    3. **[!MANDATORY!]** Connect to language server process and begin voice capture
     ![](resources/initialize.png)
 
 
-11. Invoke **Initialize** on Vosk component to connect to server
-
-    ```
-    Addr - corresponds to Address in vls UI
-    Port - corresponds to Port in vls UI
-    ```
-
-12. Invoke **Begin Capture** on Vosk component to start microphone capture
-13. Start talking
-14. Chack *Partial Result Received* event gets executed
+3.  Start talking
+4.  Check *Partial Result Received* event gets executed
 
 
 ## Minimal setup
