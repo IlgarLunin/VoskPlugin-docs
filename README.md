@@ -70,7 +70,7 @@ Above values may differ depending on actual microphone characteristics.
    
    ![](resources/vlsrun.png)
 
-   > **!NOTE!**: Depending on model size, you need to wait until model loaded in to memory, before start feeding server with voice data. e.g. If model size is ~2GB, it acn take ~10-30 seconds.
+   > **!NOTE!**: Depending on model size, you need to wait until model loaded in to memory, before start feeding server with voice data. e.g. If model size is ~2GB, it acn take ~10-30 seconds. But this is one time event, you can load your language to memory once with OS startup.
    ![](resources/ram.png)
 
 7. Open unreal
@@ -83,15 +83,17 @@ Above values may differ depending on actual microphone characteristics.
     1. Bind to "Partial Result Received" event
     ![](resources/partialresult.png)
 
-    2. **[Optional]** Bind to "Final Result Received" event
+    1. **[Optional]** Bind to "Final Result Received" event
     ![](resources/finalresult.png)
 
-    3. **[!MANDATORY!]** Connect to language server process and begin voice capture
+    1. **[!MANDATORY!]** Connect to language server process and begin voice capture
     ![](resources/initialize.png)
+    NOTE: `Addr` and `Port` coresponds to language server UI (*0.0.0.0 is the same as 127.0.0.1, it's just localhost*)
+    ![](resources/initnode.png)
 
 
-3.  Start talking
-4.  Check *Partial Result Received* event gets executed
+11. Start talking
+12. Check *Partial Result Received* event gets executed
 
 
 ## Minimal setup
