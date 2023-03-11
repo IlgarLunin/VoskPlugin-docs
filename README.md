@@ -2,7 +2,7 @@
 
 ![](resources/thumbnail.png)
 
-This is UE4 plugin for accurate speech recognition, and it doesn't not require internet connection.
+This is UE4 plugin for accurate speech recognition, and it doesn't require internet connection.
 
 # Important steps
 
