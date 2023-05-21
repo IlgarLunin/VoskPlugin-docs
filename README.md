@@ -51,6 +51,14 @@ unreal sound wave and play it.
 
 Above values may differ depending on actual microphone characteristics.
 
+Another thing to keep in mind, if component connected to server, by default, it will try to send voice data during microphone capture. If you don't want this behavior, you can disable it like this
+
+![](resources/send_data_when_recording.png)
+
+This may be useful if you only want to get whole voice recording first, and then send it to server.
+
+![](resources/push_to_talk_send_once.png)
+
 
 # Running language server
 1. Download latest version [here](https://github.com/IlgarLunin/vosk-language-server/releases)
