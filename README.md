@@ -2,10 +2,33 @@
 
 ![](resources/thumbnail.png)
 
-This is UE4 plugin for accurate speech recognition, and it doesn't require internet connection.
+This is Unreal Engine plugin for accurate speech recognition, and it doesn't require internet connection.
 
-# Important steps
+# Table of contents
+- [**Offline Speech Recognition**](#offline-speech-recognition)
+- [Table of contents](#table-of-contents)
+- [High level overview](#high-level-overview)
+- [Project settings](#project-settings)
+- [Test your microphone](#test-your-microphone)
+- [Where to download languages and how to test them](#where-to-download-languages-and-how-to-test-them)
+- [Using built-in language server](#using-built-in-language-server)
+  - [Automatic speech recognition based on silence detection](#automatic-speech-recognition-based-on-silence-detection)
+  - [Push to talk (Speak first, then recognize)](#push-to-talk-speak-first-then-recognize)
+- [Running language server as external process](#running-language-server-as-external-process)
+- [Running server process and game process at the same time](#running-server-process-and-game-process-at-the-same-time)
+- [Passing SoundWave as input, instead of microphone](#passing-soundwave-as-input-instead-of-microphone)
+  - [How Send Data to Language Server node works](#how-send-data-to-language-server-node-works)
+- [Platforms supported](#platforms-supported)
+- [Links](#links)
 
+
+# High level overview
+Since this is the speech to text plugin (STT), first thing you need is to be able to record your voice (any recording device). Then recorded voice is passed to speech recognizer, speech recognizer is giving your speech back in textual form. Speech recognizer is working with 1 language at a time. Each language is a downloadable folder with files.
+
+In order to package shipe you game or app to end user, you will need to package each language model with your game, as well as language server itself (this is optional, since your game itself can be a server).
+
+
+# Project settings
 To make microphone work, you need to add following lines to `DefaultEngine.ini` of the project.
 ```
 [Voice]
@@ -44,23 +67,49 @@ Console variables can be modified in runtime like this
 
 ![](resources/silencenode.png)
 
+Above values may differ depending on actual microphone characteristics.
+
+# Test your microphone
 To debug your microphone, input you can convert output sound buffer to
 unreal sound wave and play it.
 
 ![](resources/buffertosound.png)
 
-Above values may differ depending on actual microphone characteristics.
-
 Another thing to keep in mind, if component connected to server, by default, it will try to send voice data during microphone capture. If you don't want this behavior, you can disable it like this
 
 ![](resources/send_data_when_recording.png)
 
-This may be useful if you only want to get whole voice recording first, and then send it to server.
+Use this for push to talk style recognition (*when you record whole phrase first, and then send it to server*)
 
 ![](resources/push_to_talk_send_once.png)
 
+# Where to download languages and how to test them
+All available languages are available [here](https://alphacephei.com/vosk/models)
 
-# Running language server
+To test how specific language behaves, you can use [external language server app](https://github.com/IlgarLunin/vosk-language-server)
+
+# Using built-in language server
+*This method is preferable for simple scenarios, when you don't need to separate your game and language server, here you don't have all this hustle managing external process and communicating with server via web sockets.*
+
+For both automatic and push to talk style recognition, you start from adding **SpeechRecognizer** component to your actor
+   
+![add_speech_recognizer](resources/add_speech_recognizer.png)
+
+And then loading language into it. (This is non blocking function, and you know exactly when model is fully loaded into memory by connecting to **Finished** output pin)
+
+![](resources/initialize_recognizer.png)
+
+## Automatic speech recognition based on silence detection
+![](resources/recognizer_automatic.png)
+
+## Push to talk (Speak first, then recognize)
+![](resources/recognizer_push_to_talk.png)
+
+Feed voice data node can handle any amount of pre recorded speech, see [this section](#how-send-data-to-language-server-node-works)
+
+# Running language server as external process
+*In more complex cases this method is preferable over using built-in. You can have a single language server running in cloud or local server, and it can process multiple clients at the same time, since it's multithreaded.*
+
 1. Download latest version [here](https://github.com/IlgarLunin/vosk-language-server/releases)
 2. Run **vls.exe**, which is a user interface for **asr_server.exe**
    > **NOTE**: *asr_server.exe* is real server, you can run it without gui
@@ -104,7 +153,6 @@ This may be useful if you only want to get whole voice recording first, and then
 12. Check *Partial Result Received* event gets executed
 
 # Running server process and game process at the same time
-
 Plugin offers following nodes
 
 ![](resources/server_process.png)
@@ -142,7 +190,7 @@ To do so, plugin offers a node that will convert sound into array of bytes, it i
 
 ![](resources/pass_sound_wave.png)
 
-## How **Send Data to Language Server** node works
+## How Send Data to Language Server node works
 It takes sound bytes as first argument, and packet size as second argument. It will split all bytes into packets of given size, and send them one after another to language server, emulating microphone capture behavior. If packet size is greater than size of voice data, data will not be sent. 4096 packet size works relatively fast and suitable for short phrases. Note that if packet size is small, it will take more time to deliver entire voice to the server, and server will perform more iterations accordingly. You should play around with packet size in your specific case.
 
 
