@@ -11,7 +11,7 @@ This is Unreal Engine plugin for accurate speech recognition, and it doesn't req
 - [Project settings](#project-settings)
 - [Test your microphone](#test-your-microphone)
 - [Where to download languages and how to test them](#where-to-download-languages-and-how-to-test-them)
-- [Using built-in language server](#using-built-in-language-server)
+- [Using built-in language server (USE THIS)](#using-built-in-language-server)
   - [Automatic speech recognition based on silence detection](#automatic-speech-recognition-based-on-silence-detection)
   - [Push to talk (Speak first, then recognize)](#push-to-talk-speak-first-then-recognize)
 - [Running language server as external process](#running-language-server-as-external-process)
